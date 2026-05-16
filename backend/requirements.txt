@@ -1,0 +1,14 @@
+Django>=5.0
+djangorestframework
+django-cors-headers
+djangorestframework-simplejwt
+django-filter
+drf-spectacular
+djangorestframework-camel-case
+Pillow
+python-decouple
+django-ratelimit
+gunicorn
+psycopg2-binary
+django-storages
+boto3
