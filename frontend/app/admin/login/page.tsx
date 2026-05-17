@@ -14,7 +14,15 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/login/`, {
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE || process.env.NEXT_PUBLIC_API_URL || "";
+      console.log("API Base:", apiBase);
+      if (!apiBase || apiBase === "undefined") {
+        console.error("API Base URL is not defined. Check your environment variables.");
+        setError("Configuration error. Please try again later.");
+        return;
+      }
+
+      const res = await fetch(`${apiBase}/auth/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -30,6 +38,7 @@ export default function AdminLogin() {
       localStorage.setItem("admin_token", data.access);
       router.push("/admin");
     } catch (err) {
+      console.error(err);
       setError("Login failed");
     }
   }
