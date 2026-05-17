@@ -23,13 +23,13 @@ ALLOWED_HOSTS = _csv_env(
 # CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = _csv_env(
     'CSRF_TRUSTED_ORIGINS',
-    'https://company-website-api.onrender.com,https://www.achyutdhital.com.np,https://achyutdhital.com.np'
+    'https://company-website-api.onrender.com,https://company-site-git-main-achyutdhital75-3174s-projects.vercel.app,https://www.achyutdhital.com.np,https://achyutdhital.com.np'
 )
 
 # CORS
 CORS_ALLOWED_ORIGINS = _csv_env(
     'CORS_ALLOWED_ORIGINS',
-    'https://www.achyutdhital.com.np,https://achyutdhital.com.np'
+    'https://company-site-git-main-achyutdhital75-3174s-projects.vercel.app,https://www.achyutdhital.com.np,https://achyutdhital.com.np'
 )
 
 # Static files
