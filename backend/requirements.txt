@@ -9,6 +9,7 @@ Pillow
 python-decouple
 django-ratelimit
 gunicorn
+whitenoise
 psycopg2-binary
 django-storages
 boto3
