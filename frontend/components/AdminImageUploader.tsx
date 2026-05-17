@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { apiFetch } from "../../lib/adminAuth";
+import { apiFetch } from "../lib/adminAuth";
 
 export default function AdminImageUploader({ onComplete }: { onComplete: (url: string) => void }) {
   const [uploading, setUploading] = useState(false);
