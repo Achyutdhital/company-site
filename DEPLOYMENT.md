@@ -11,6 +11,10 @@ Frontend (Vercel)
 
 Backend (Railway / Render / Fly / Heroku)
 - Create a new service and connect the same GitHub repository. Set project root to `backend` (if using monorepo).
+- On Render, do not use Poetry for this repo. There is no `pyproject.toml` here, so the backend must install from `requirements.txt`.
+- If you use the Render blueprint in `render.yaml`, Render will use:
+  - Build command: `pip install -r requirements.txt`
+  - Start command: `python manage.py migrate && gunicorn config.wsgi --bind 0.0.0.0:$PORT --log-file -`
 - Set env vars in the platform:
   - `DJANGO_SECRET_KEY` (must be set)
   - `DJANGO_SETTINGS_MODULE` = `config.settings.prod`
@@ -21,6 +25,56 @@ Backend (Railway / Render / Fly / Heroku)
 - After deployment run migrations and collectstatic (one-off tasks):
   - `python manage.py migrate`
   - `python manage.py collectstatic --noinput`
+
+Create a super admin on Render
+- Open your Render service dashboard.
+- Use the service shell/console if available, or run a one-off command.
+- Run this command inside the `backend` app with the production environment variables enabled:
+
+```bash
+python manage.py createsuperuser
+```
+
+- Enter a username, email, and password when prompted.
+- If Render gives you a one-off command box, you can also run:
+
+```bash
+python manage.py createsuperuser --username admin --email admin@example.com
+```
+
+- After that, sign in at your backend admin URL, usually:
+
+```text
+https://company-website-api.onrender.com/admin/
+```
+
+If the shell cannot use interactive prompts, create a user with environment variables instead:
+
+```bash
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=choose-a-strong-password
+python manage.py createsuperuser --noinput
+```
+
+Free Render instance without shell
+- If Render free tier does not expose a shell, use the Start Command to bootstrap the admin user on startup.
+- Set these environment variables in Render first:
+
+```bash
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=choose-a-strong-password
+```
+
+- Then use this Start Command in Render:
+
+```bash
+sh -c 'python manage.py migrate && (python manage.py createsuperuser --noinput || true) && gunicorn config.wsgi --bind 0.0.0.0:$PORT --log-file -'
+```
+
+- After the first successful deploy, you can keep the same command or switch back to just Gunicorn.
+- If you keep it, Django will skip creating the user when it already exists.
 
 Notes
 - Do NOT commit secrets to the repo. Use environment variables on the hosting platform.
